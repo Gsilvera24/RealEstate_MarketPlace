@@ -21,7 +21,7 @@ w3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER_URI")))
 def load_contract():
 
     # Load the contract ABI
-    with open(Path('./contracts/compiled/artregistry_abi.json')) as f:
+    with open(Path('./contracts/compiled/home_registry_abi.json')) as f:
         contract_abi = json.load(f)
 
     # Set the contract address (this is the address of the deployed contract)
@@ -40,7 +40,7 @@ def load_contract():
 contract = load_contract()
 
 
-st.title("Art Registry Appraisal System")
+st.title("Home Appraisal System")
 st.write("Choose an account to get started")
 accounts = w3.eth.accounts
 address = st.selectbox("Select Account", options=accounts)
@@ -49,19 +49,27 @@ st.markdown("---")
 ################################################################################
 # Register New Artwork
 ################################################################################
-st.markdown("## Register New Artwork")
+st.markdown("## Register Your Home")
 
-artwork_name = st.text_input("Enter the name of the artwork")
-artist_name = st.text_input("Enter the artist name")
-initial_appraisal_value = st.text_input("Enter the initial appraisal amount")
+home_address = st.text_input("Enter address of the home")
+sqt_ft = st.text_input("Enter total square footage")
+bedrooms = st.text_input("Enter number of bedrooms")
+bathrooms = st.text_input("Enter number of bathrooms")
+home_value = st.text_input("Enter the initial appraisal amount")
+zillow_link = st.text_input("Enter Zillow Link")
+yearbuilt = st.text_input("Enter the Year built")
 artwork_uri = st.text_input("Enter the URI to the artwork")
 
-if st.button("Register Artwork"):
-    tx_hash = contract.functions.registerArtwork(
+if st.button("Register Home"):
+    tx_hash = contract.functions.registerhome(
         address,
-        artwork_name,
-        artist_name,
-        int(initial_appraisal_value),
+        home_address,
+        sqt_ft,
+        bedrooms,
+        bathrooms,
+        int(home_value),
+        zillow_link,
+        yearbuilt,
         artwork_uri
     ).transact({'from': address, 'gas': 1000000})
     receipt = w3.eth.waitForTransactionReceipt(tx_hash)

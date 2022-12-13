@@ -38,16 +38,16 @@ contract = load_contract()
 ################################################################################
 # Register New Artwork
 ################################################################################
-st.title("Register New Artwork")
+st.title("Register Your Home")
 accounts = w3.eth.accounts
 
 # Use a Streamlit component to get the address of the artwork owner from the user
-address = st.selectbox("Select Artwork Owner", options=accounts)
+address = st.selectbox("Select Home Owner", options=accounts)
 
 # Use a Streamlit component to get the artwork's URI
-artwork_uri = st.text_input("The URI to the artwork")
+artwork_uri = st.text_input("House Images")
 
-if st.button("Register Artwork"):
+if st.button("Register Your Home"):
 
     # Use the contract to send a transaction to the registerArtwork function
     tx_hash = contract.functions.registerArtwork(
@@ -55,8 +55,7 @@ if st.button("Register Artwork"):
         artwork_uri
     ).transact({'from': address, 'gas': 1000000})
     receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-    st.write("Transaction receipt mined:")
-    st.write(dict(receipt))
+    st.write("Your Home has been listed.")
 
 st.markdown("---")
 
@@ -70,7 +69,7 @@ selected_address = st.selectbox("Select Account", options=accounts)
 
 tokens = contract.functions.balanceOf(selected_address).call()
 
-st.write(f"This address owns {tokens} tokens")
+st.write(f"This address owns {tokens} Home/s.")
 
 st.markdown("## Check  Ownership and Display Token")
 
