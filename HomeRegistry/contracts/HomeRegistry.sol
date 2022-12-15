@@ -19,6 +19,14 @@ contract HomeRegistry is ERC721Full {
 
     event Appraisal(uint256 tokenId, uint256 home_value, string reportURI);
 
+    event home_summary(uint256 tokenId, string home_address,
+        string sqt_ft,
+        string bedrooms,
+        string bathrooms,
+        uint256 home_value,
+        string zillow_link,
+        string yearbuilt);
+
     function registerhome(
         address owner,
         string memory home_address,
@@ -36,6 +44,8 @@ contract HomeRegistry is ERC721Full {
         _setTokenURI(tokenId, tokenURI);
 
         homeCollection[tokenId] = Home(home_address, sqt_ft, bedrooms, bathrooms, home_value, zillow_link, yearbuilt);
+        
+        emit home_summary(tokenId, home_address, sqt_ft, bedrooms, bathrooms, home_value, zillow_link, yearbuilt);
 
         return tokenId;
     }
