@@ -58,7 +58,7 @@ bathrooms = st.text_input("Enter number of bathrooms")
 home_value = st.text_input("Enter the initial appraisal amount")
 zillow_link = st.text_input("Enter Zillow Link")
 yearbuilt = st.text_input("Enter the Year built")
-artwork_uri = st.text_input("Enter the URI to the artwork")
+artwork_uri = st.text_input("Enter an Image of your Home")
 
 if st.button("Register Home"):
     tx_hash = contract.functions.registerhome(
@@ -81,29 +81,29 @@ st.markdown("---")
 ################################################################################
 # Appraise Art
 ################################################################################
-# st.markdown("## Appraise Artwork")
-# tokens = contract.functions.totalSupply().call()
-# token_id = st.selectbox("Choose an Art Token ID", list(range(tokens)))
-# new_appraisal_value = st.text_input("Enter the new appraisal amount")
-# report_uri = st.text_area("Enter notes about the appraisal")
-# if st.button("Appraise Artwork"):
+#st.markdown("## Appraise Artwork")
+#tokens = contract.functions.totalSupply().call()
+#token_id = st.selectbox("Choose an Art Token ID", list(range(tokens)))
+#new_appraisal_value = st.text_input("Enter the new appraisal amount")
+#report_uri = st.text_area("Enter notes about the appraisal")
+#if st.button("Appraise Artwork"):
 
-#     # Use the token_id and the report_uri to record the appraisal
-#     tx_hash = contract.functions.newAppraisal(
-#         token_id,
-#         int(new_appraisal_value),
-#         report_uri
-#     ).transact({"from": w3.eth.accounts[0]})
-#     receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-#     st.write(receipt)
-# st.markdown("---")
+     # Use the token_id and the report_uri to record the appraisal
+     #tx_hash = contract.functions.newAppraisal(
+         #token_id,
+         #int(new_appraisal_value),
+         #report_uri
+     #).transact({"from": w3.eth.accounts[0]})
+     #receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+     #st.write(receipt)
+     #st.markdown("---")
 
 ################################################################################
 # Get Appraisals
 ################################################################################
-st.markdown("## Get the appraisal report history")
-art_token_id = st.number_input("Artwork ID", value=0, step=1)
-if st.button("Get Appraisal Reports"):
+st.markdown("## Get Home Registry Details")
+art_token_id = st.number_input("Token ID", value=0, step=1)
+if st.button("Get Details"):
     appraisal_filter = contract.events.home_summary.createFilter(
         fromBlock=0,
         argument_filters={"tokenId": art_token_id}
@@ -112,13 +112,34 @@ if st.button("Get Appraisal Reports"):
     if appraisals:
         for appraisal in appraisals:
             report_dictionary = dict(appraisal)
-            st.markdown("### Appraisal Report Event Log")
+            #st.markdown("### Appraisal Report Event Log")
             #st.write(report_dictionary)
-            st.markdown("### Appraisal Report Details")
-            st.write(report_dictionary["args"])
-            token_uri = contract.functions.tokenURI(art_token_id).call()
-            st.markdown("### Home Value")
+
+            st.markdown("### Registry Details")
+            #st.write(report_dictionary["args"])
+
+            st.markdown("#### Home Address")
+            st.write(report_dictionary["args"]["home_address"])
+
+            st.markdown("#### Square Feet")
+            st.write(report_dictionary["args"]["sqt_ft"])
+
+            st.markdown("#### Number of Bedrooms")
+            st.write(report_dictionary["args"]["bedrooms"])
+
+            st.markdown("#### Number of Bathrooms")
+            st.write(report_dictionary["args"]["bathrooms"])
+
+            st.markdown("#### Home Value")
             st.write(report_dictionary["args"]["home_value"])
+
+            st.markdown("#### Zillow Link")
+            st.write(report_dictionary["args"]["zillow_link"])
+         
+            st.markdown("#### Year Built")
+            st.write(report_dictionary["args"]["yearbuilt"])
+
+            token_uri = contract.functions.tokenURI(art_token_id).call()
             #st.write(f"The tokenURI is {token_uri}")
             st.image(token_uri)
     else:
